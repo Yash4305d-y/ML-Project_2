@@ -1,51 +1,118 @@
-<h1>❤️ Heart Disease Prediction Engine</h1>
+# ❤️ Heart Disease Prediction Engine
 
-<p>An end-to-end machine learning pipeline built to predict heart disease risk using custom, domain-specific feature engineering.</p>
+An end-to-end machine learning project that predicts the likelihood of heart disease using multiple classification algorithms and custom feature engineering.
 
-<blockquote>
-  <strong>🚀 Work in Progress:</strong> This project is currently ongoing. The current architecture establishes a baseline using linear methods, and active development is focused on migrating to classification frameworks to scale up model accuracy.
-</blockquote>
+> **✅ Project Status:** Completed. Multiple machine learning models were trained, evaluated, and compared to identify the best-performing classifier.
 
-<hr />
+---
 
-<h2>📊 Preprocessing Pipeline</h2>
-<p>To preserve mathematical integrity and avoid data leakage, data flows through a strict order of operations:</p>
+## 🌐 Live Demo
 
-<ul>
-  <li><strong>1. Raw Ratios:</strong> Calculates <code>HR_BP_Ratio</code> (<code>MaxHR / RestingBP</code>) on raw numbers first to avoid breaking division math after scaling.</li>
-  <li><strong>2. One-Hot Encoding:</strong> Converts categorical columns into clean binary vectors using <code>drop_first=True</code> to protect the linear model from multicollinearity.</li>
-  <li><strong>3. Standardization:</strong> Applies <code>StandardScaler</code> to all continuous columns so they share a uniform scale centered around zero.</li>
-  <li><strong>4. Interaction Terms:</strong> Generates advanced columns (<code>MaxHR * Oldpeak</code>, <code>Age * Cholesterol</code>, and <code>Oldpeak²</code>) <em>after</em> scaling to cleanly map non-linear clinical risks.</li>
-</ul>
+🚀 Try the deployed application here:
 
-<hr />
+**❤️ HeartWise ML:** https://heartwise-ml.streamlit.app/
 
-<h2>💡 Core Architecture Concept</h2>
-<p>The core concept centers around equipping a standard, rigid model with advanced visual capabilities. By generating interaction matrices and polynomial boundaries post-standardization, the model is forced to recognize how vital features compound together—like high heart rates paired with abnormal electrical readouts—allowing a simple architecture to capture multi-dimensional clinical risks without destabilizing the feature weight space.</p>
+The deployed web application uses the **K-Nearest Neighbors (KNN)** model, which achieved the highest performance during model evaluation.
 
-<hr />
+---
 
-<h2>📈 Performance Baseline</h2>
+## 📊 Preprocessing Pipeline
 
-<table>
-  <tr>
-    <th>Metric</th>
-    <th>Current Baseline Value</th>
-    <th>Target Benchmark</th>
-  </tr>
-  <tr>
-    <td><strong>Linear Model R² Score</strong></td>
-    <td><code>0.5304</code></td>
-    <td><em>Baseline Set</em></td>
-  </tr>
-</table>
+To ensure high-quality model performance and prevent data leakage, the dataset follows a structured preprocessing pipeline:
 
-<p><strong>Analysis:</strong> The engineered interaction terms successfully injected non-linear capabilities into the architecture, maximizing performance boundaries for a linear structure tracking a binary target.</p>
+1. **Feature Engineering**
 
-<hr />
+   * Created a custom `HR_BP_Ratio` feature (`MaxHR / RestingBP`)
+   * Generated interaction features:
 
-<h2>🔮 Upcoming Improvements</h2>
-<ul>
-  <li><strong>Model Migration:</strong> Transitioning the baseline pipeline to classification models (like <code>LogisticRegression</code> or ensemble tree classifiers) to natively capture the binary decision boundaries.</li>
-  <li><strong>Regularization:</strong> Introducing Ridge (L2) and Lasso (L1) parameters to penalize and optimize the newly added high-dimensional interaction weights.</li>
-</ul>
+     * `MaxHR × Oldpeak`
+     * `Age × Cholesterol`
+     * `Oldpeak²`
+
+2. **Categorical Encoding**
+
+   * Applied One-Hot Encoding using `drop_first=True` to avoid multicollinearity.
+
+3. **Feature Scaling**
+
+   * Standardized numerical features using `StandardScaler` for algorithms sensitive to feature magnitude.
+
+4. **Model Training**
+
+   * Trained and evaluated multiple classification algorithms using the engineered feature set.
+
+---
+
+## 💡 Core Architecture
+
+Rather than relying solely on raw medical attributes, this project enhances predictive performance through custom feature engineering and interaction terms. These engineered features help the models capture complex relationships between patient characteristics that may not be evident from individual variables alone.
+
+---
+
+## 📊 Model Performance Comparison
+
+| Rank | Model                         |  Accuracy  |  F1-Score  |
+| :--: | ----------------------------- | :--------: | :--------: |
+|  🥇  | **K-Nearest Neighbors (KNN)** | **89.67%** | **0.9073** |
+|  🥈  | Logistic Regression           | **87.50%** | **0.8856** |
+|  🥉  | Naive Bayes                   | **87.50%** | **0.8844** |
+|  4️⃣ | Support Vector Machine (SVM)  | **85.33%** | **0.8670** |
+|  5️⃣ | Decision Tree                 | **75.54%** | **0.7805** |
+
+---
+
+## 🏆 Best Performing Model
+
+| Metric   | Model                         |      Score |
+| -------- | ----------------------------- | ---------: |
+| Accuracy | **K-Nearest Neighbors (KNN)** | **89.67%** |
+| F1-Score | **K-Nearest Neighbors (KNN)** | **0.9073** |
+
+**Analysis:**
+Among all evaluated classifiers, **K-Nearest Neighbors (KNN)** achieved the highest overall performance, delivering the best balance between prediction accuracy and F1-score. Logistic Regression and Naive Bayes also performed strongly, while Decision Tree showed comparatively lower generalization on the test set.
+
+---
+
+## 🧪 Models Evaluated
+
+* ✅ Logistic Regression
+* ✅ K-Nearest Neighbors (KNN)
+* ✅ Support Vector Machine (SVM)
+* ✅ Naive Bayes
+* ✅ Decision Tree
+
+---
+
+## 🛠️ Tech Stack
+
+* Python
+* NumPy
+* Pandas
+* Matplotlib
+* Seaborn
+* Scikit-learn
+* Streamlit
+
+---
+
+## 🔮 Future Improvements
+
+* Hyperparameter tuning using GridSearchCV and RandomizedSearchCV
+* Cross-validation for robust model evaluation
+* Feature selection and dimensionality reduction
+* Ensemble learning (Random Forest, XGBoost)
+* Enhance the Streamlit application with prediction history and richer visualizations
+
+---
+
+## 📌 Conclusion
+
+This project demonstrates a complete machine learning workflow for heart disease prediction, including data preprocessing, feature engineering, model training, evaluation, comparison, and deployment.
+
+Five classification algorithms were evaluated, with **K-Nearest Neighbors (KNN)** emerging as the best-performing model, achieving an **Accuracy of 89.67%** and an **F1-Score of 0.9073**. The trained KNN model has been deployed as an interactive Streamlit web application for real-time heart disease risk prediction.
+
+The project highlights how thoughtful preprocessing and feature engineering can significantly improve predictive performance on structured medical datasets.
+
+---
+
+⭐ If you found this project useful, consider giving it a star!
