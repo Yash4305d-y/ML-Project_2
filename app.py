@@ -65,25 +65,38 @@ st.markdown(
 @st.cache_resource
 def load_artifacts():
     """Loads the KNN model, Scaler, and Feature Columns safely."""
-    try:
-        model = joblib.load("models/knn_model.pkl")
-        scaler = joblib.load("models/scaler.pkl")
-        columns = joblib.load("models/columsn.pkl")
-        return model, scaler, columns
-    except Exception as e:
-        # Fallback search in root directory if models/ subfolder isn't used
+    # List of possible paths to check automatically (models/ folder OR main root folder)
+    possible_paths = [
+        # Check inside models/ folder first
+        (
+            "models/knn_heart_model.pkl",
+            "models/scaler_heart.pkl",
+            "models/columsn.pkl",
+        ),
+        # Check in main root directory if not in models/ folder
+        ("knn_heart_model.pkl", "scaler_heart.pkl", "columsn.pkl"),
+        # Check alternative common naming just in case
+        ("models/knn_model.pkl", "models/scaler.pkl", "models/columsn.pkl"),
+        ("knn_model.pkl", "scaler.pkl", "columsn.pkl"),
+    ]
+
+    for model_path, scaler_path, col_path in possible_paths:
         try:
-            model = joblib.load("knn_model.pkl")
-            scaler = joblib.load("scaler.pkl")
-            columns = joblib.load("columsn.pkl")
-            return model, scaler, columns
-        except Exception:
-            st.error(
-                f"Error loading model files. Please ensure model.pkl, scaler.pkl, and columsn.pkl exist in your repo directory. Details: {e}"
-            )
-            return None, None, None
+            loaded_model = joblib.load(model_path)
+            loaded_scaler = joblib.load(scaler_path)
+            loaded_columns = joblib.load(col_path)
+            return loaded_model, loaded_scaler, loaded_columns
+        except FileNotFoundError:
+            continue
+
+    # If none of the paths work, display a clear error in the UI
+    st.error(
+        "🚨 Could not find the model files! Please check that `knn_heart_model.pkl`, `scaler_heart.pkl`, and `columsn.pkl` are inside your `models/` folder."
+    )
+    return None, None, None
 
 
+# Explicitly define variables by calling the loader function
 model, scaler, feature_columns = load_artifacts()
 
 # ==========================================
